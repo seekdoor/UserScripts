@@ -2,7 +2,7 @@
 // @name         百Bing图
 // @name:en      BingBgForBaidu
 // @namespace    hoothin
-// @version      2.3.28
+// @version      2.3.41
 // @description     给百度首页换上Bing的背景图，并添加背景图链接与日历组件
 // @description:en  Just change the background image of baidu.com to bing.com
 // @author       hoothin
@@ -14,14 +14,14 @@
 // @connect      global.bing.com
 // @connect      cn.bing.com
 // @license      MIT License
-// @include      *://www.baidu.com/
-// @include      *://www.baidu.com/home*
-// @include      *://www.baidu.com/?tn=*
-// @include      *://www.baidu.com/index.php*
-// @include      *://ipv6.baidu.com/
-// @include      *://ipv6.baidu.com/home*
-// @include      *://ipv6.baidu.com/?tn=*
-// @include      *://ipv6.baidu.com/index.php*
+// @match      *://www.baidu.com/
+// @match      *://www.baidu.com/home*
+// @match      *://www.baidu.com/?tn=*
+// @match      *://www.baidu.com/index.php*
+// @match      *://ipv6.baidu.com/
+// @match      *://ipv6.baidu.com/home*
+// @match      *://ipv6.baidu.com/?tn=*
+// @match      *://ipv6.baidu.com/index.php*
 // ==/UserScript==
 
 (function() {
@@ -42,7 +42,7 @@
         bingBgLink.classList.add("s-top-right-text","c-font-normal","mnav","c-color-t");
         riliLink.classList.add("s-top-right-text","c-font-normal","mnav","c-color-t");
     }
-    if(icons)icons.insertBefore(bingBgLink,icons.firstChild);
+    if(icons)icons.insertBefore(bingBgLink,icons.children[1]||icons.firstChild);
     var iframe=document.createElement("iframe");
     iframe.src="/s?wd=%E6%97%A5%E5%8E%86";
     iframe.setAttribute("scrolling","no");
@@ -52,6 +52,7 @@
     iframe.style.position="fixed";
     iframe.style.zIndex="99";
     iframe.style.borderRadius="16px";
+    iframe.name="pagetual-iframe";
     iframe.style.border="none";
     var sUpfuncMenus=document.querySelector("#s_upfunc_menus");
     if(!sUpfuncMenus){
@@ -67,60 +68,75 @@
     if(dateDay<10)dateDay="0"+dateDay;
     if(dateMonth<10)dateMonth="0"+dateMonth;
     var week=["\u65e5","\u4e00","\u4e8c","\u4e09","\u56db","\u4e94","\u516d"];
-    riliLink.innerHTML="<span class='title' style='cursor: zoom-in; border: solid 1px; border-radius: 10px; padding: 5px;'>"+date.getFullYear()+"-"+dateMonth+"-"+dateDay+" "+"\u661f\u671f"+week[date.getDay()]+"</span>";
-    if(icons)icons.insertBefore(riliLink,icons.firstChild);
+    var riliurl=GM_getValue("riliurl")||"https://www.rili.com.cn/";
+    riliLink.innerHTML="<span class='title' style='cursor: pointer; border-bottom: solid 1px; padding: 2px 0;'>"+date.getFullYear()+"-"+dateMonth+"-"+dateDay+" \u661f\u671f"+week[date.getDay()]+"</span>";
+    riliLink.onclick=function(){
+        window.open(riliurl);
+    };
+    riliLink.oncontextmenu=function(e){
+        let newRiliurl=prompt("自定义 url", riliurl);
+        if(newRiliurl){
+            riliurl=newRiliurl;
+            GM_setValue("riliurl", newRiliurl);
+        }
+        e.preventDefault();
+    };
+    if(icons)icons.insertBefore(riliLink,icons.children[1]||icons.firstChild);
     iframe.onload=function(){
-        var contentHead=this.contentWindow.document.querySelector("#head");
+        var contentHead=iframe.contentDocument.querySelector("#head");
         if(contentHead && contentHead.parentNode)contentHead.parentNode.removeChild(contentHead);
         var $=unsafeWindow.$;
         var iframeDoc=$(iframe.contentDocument);
         var rili=$("div.op-calendar-new,div.op-calendar-pc,div.result-op.c-container.xpath-log.new-pmd>div",iframe.contentDocument);
         rili.after("<br/><br/>");
-        $("#head,.head_nums_cont_outer",iframe.contentDocument).hide();
+        $("#head,.head_nums_cont_outer,#searchTag",iframe.contentDocument).hide();
         iframe.setAttribute("scrolling","no");
-        var today=$(".op-calendar-new-table-border,.op-calendar-new-table-today,.op-calendar-pc-table-border,.op-calendar-pc-table-today,.cell-today",iframe.contentDocument);
         var t;
         //riliLink.innerHTML="<span class='title' style='text-decoration:overline;cursor:crosshair'>"+$(".op-calendar-new-right-date,.op-calendar-pc-right-date",iframe.contentDocument).html()+"</span>";
-        riliLink.onmouseover=function(){
-            t=setTimeout(function(){
+        riliLink.onmouseenter=function(){
+            clearTimeout(t);
                 $(iframe).show(200);
-                var top=rili.offset().top;
-                var left=rili.offset().left;
-                if(top===0)top=138;
-                iframeDoc.scrollTop(top);
-                if(left===0)left=121;
-                iframeDoc.scrollLeft(left);
-                var width=rili.width();
-                var height=rili.height();
-                iframe.width=width===0?538:width;
-                iframe.height=height===0?366:height;
-            },500);
+                iframeDoc.scrollTop(137);
+                iframeDoc.scrollLeft(134);
+                iframe.width=592;
+                iframe.height=665;
         };
-        riliLink.onmouseout=function(){
+        riliLink.onmouseleave=function(){
+            clearTimeout(t);
+            t=setTimeout(function(){
+                $(iframe).hide(500);
+            },300);
+        };
+        iframe.onmouseenter=function(){
             clearTimeout(t);
         };
-        iframe.onmouseout=function(){
-            $(iframe).hide(500);
+        iframe.onmouseleave=function(){
+            clearTimeout(t);
+            t=setTimeout(function(){
+                $(iframe).hide(500);
+            },100);
         };
-        var holiday=$('[class*="calendar-right-holiday"]',iframe.contentDocument)[0];
-        if(holiday || today[0].classList.contains("op-calendar-new-table-festival") || today[0].classList.contains("op-calendar-pc-table-festival")){
-            var title=holiday.innerHTML;
-            title=title || today[0].title || $(".op-calendar-new-table-almanac,.op-calendar-pc-table-almanac",today).text();
-            if(!/^(一|二|三|四|五|六|七|八|九|十|初|廿)+$/.test(title)){
-                riliLink.innerHTML+=title?" <font color='#FFFF66' style='background-color:#e02d2d;font-weight:bold;border-radius: 8px; padding: 3px; border: solid 1px #e02d2d;'>"+title+"</font>":"";
-                riliLink.title=title;
-            }
+        var holiday=$('.cos-search-link,.sc-search-link',iframe.contentDocument)[0];
+        if(holiday){
+            var title=holiday.innerText.slice(0, -1);
+            riliLink.innerHTML+=title?" <font color='#FFFF66' style='background-color:#e02d2d;font-weight:bold;border-radius: 8px; padding: 3px; border: solid 1px #e02d2d;'>"+title+"</font>":"";
+            riliLink.title=title;
         }
     };
     var skinContainer=document.querySelector(".s-skin-container");
     if(!skinContainer){
         skinContainer=document.getElementsByTagName("body")[0];
-        GM_addStyle(".hot-refresh{padding-bottom:7px;}.hot-title>div,.hot-refresh{background-color: #f0f8ffc9; border-radius: 5px 5px 0 0}.s-hotsearch-content{position: absolute; background-color: #f0f8ffc9; border-radius: 0 0 10px 10px;padding-right: 2px;}.s_ipt{margin:0!important;}.s_ipt_wr{border-radius: 10px 4px 4px 10px;border-radius: 10px 0 0 10px;background: #fff!important;}#qrcodeCon{display:none}body{position:fixed;_position:absolute;top:0;left:0;height:100%;width:100%;min-width:1000px;z-index:-10;background-position:center 0;background-repeat:no-repeat;background-size:cover;-webkit-background-size:cover;-o-background-size:cover;zoom:1;}");
-        document.querySelector("input#su").addEventListener("click",function(){skinContainer.style.backgroundImage="";});
+        GM_addStyle(".s-news-rank-content{max-height: 180px; width: 99%; overflow-y: auto; overflow-x: hidden;}.s-top-right .ai-entry-right-nologin,.s-top-right .operate-wrapper-nologin{right:362px;}.hot-refresh{padding-bottom:7px;}.hot-title>div,.hot-refresh{border-radius: 3px 3px 0 0}.s-hotsearch-content{position: absolute; background-color: #f0f8ff95; border-radius: 0 0 5px 5px;padding-right: 2px;}.s_ipt{margin:0!important;}.s_ipt_wr{border-radius: 10px 4px 4px 10px;border-radius: 10px 0 0 10px;background: #fff!important;}#qrcodeCon{display:none}body{position:fixed;_position:absolute;top:0;left:0;height:100%;width:100%;min-width:1000px;z-index:-10;background-position:center 0;background-repeat:no-repeat;background-size:cover;-webkit-background-size:cover;-o-background-size:cover;zoom:1;}");
+        var inputsu=document.querySelector("input#su");
+        var clickHandler=e=>{
+            if(skinContainer)skinContainer.style.backgroundImage="";
+            else inputsu.removeEventListener("click",clickHandler);
+        };
+        inputsu.addEventListener("click",clickHandler);
     }
-    var bingImg=GM_getValue("bingImg");
-    if(bingImg){
-        skinContainer.style.backgroundImage = "url(\""+bingImg+"\")";
+    var bingImgObj=GM_getValue("bingImgObj");
+    if(bingImgObj){
+        skinContainer.style.backgroundImage = "url(\""+bingImgObj.base64+"\")";
     }
     var logo=document.querySelector("#s_lg_img_new");
     if(logo)logo.parentNode.removeChild(logo);
@@ -140,36 +156,47 @@
             logo.style.display="initial";
         }
     }
+    var input=document.querySelector("#kw");
+    var headWrapper=document.querySelector("#head_wrapper");
+    let inputHandler = e => {
+        setTimeout(() => {
+            if(headWrapper.children[0].id=="ent_sug"){
+                if(skinContainer)skinContainer.style.backgroundImage="";
+                skinContainer=null;
+                input.removeEventListener('input', inputHandler);
+            }
+        }, 0);
+    };
+    input.addEventListener('input', inputHandler);
     GM_xmlhttpRequest({
         method: 'GET',
-        url: "http://global.bing.com/HPImageArchive.aspx?format=js&idx=0&pid=hp&video=1&n=1",
+        url: "https://global.bing.com/HPImageArchive.aspx?format=js&idx=0&pid=hp&video=1&n=1",
         onload: function(result) {
-            var jsonData = null;
+            var jsonData=null;
             try {
-                jsonData = JSON.parse(result.responseText);
+                jsonData=JSON.parse(result.responseText);
                 var bgUrl=jsonData.images[0].url;
                 if(!/^https?:\/\//.test(bgUrl)){
-                    bgUrl="http://global.bing.com"+bgUrl;
+                    bgUrl="https://global.bing.com"+bgUrl;
                 }
                 bingBgLink.title=jsonData.images[0].copyright;
                 bingBgLink.href=bgUrl;
+                if(bingImgObj && bingImgObj.url==bgUrl)return;
+                if(skinContainer && !bingImgObj)skinContainer.style.backgroundImage="url(\""+bgUrl+"\")";
                 GM_xmlhttpRequest({
                     method: 'GET',
                     url: bgUrl,
                     responseType: "blob",
                     onload: function(r) {
-                        var blob = r.response;
-                        var fr = new FileReader();
+                        var blob=r.response;
+                        var fr=new FileReader();
                         fr.readAsDataURL(blob);
-                        fr.onload = function (e) {
-                            var base64ImgData = e.target.result;
-                            GM_setValue("bingImg",base64ImgData);
-                            skinContainer.style.backgroundImage = "url(\""+base64ImgData+"\")";
+                        fr.onload=function (e) {
+                            var base64ImgData=e.target.result;
+                            GM_setValue("bingImgObj",{url: bgUrl, base64: base64ImgData});
                         };
                     }
                 });
-                bgUrl="url(\""+bgUrl+"\")";
-                if(!bingImg)skinContainer.style.backgroundImage = bgUrl;
             }catch (e) {
                 console.log(e);
             }

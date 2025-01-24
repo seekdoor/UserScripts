@@ -1,35 +1,33 @@
 // ==UserScript==
 // @name         RandomSexyPicParser
-// @name:zh-CN   软瑟盘
 // @name:zh-TW   軟瑟盤
 // @name:ja      RandomSexyPicParser
 // @namespace    hoothin
-// @version      1.3.13
+// @version      1.3.19
 // @description        Random Sexy Pictures Parser
-// @description:zh-CN  随机色图
 // @description:zh-TW  隨機色圖
-// @description:ja     Random Sexy Pictures Parser
+// @description:ja     ランダムセクシー画像パーサー
 // @author       hoothin
-// @include      https://api.lolicon.app/setu/v2*
-// @include      https://api.nyan.xyz/httpapi/sexphoto*
-// @include      https://huanmengii.xyz/ZY/aCOS/cos*
-// @include      https://api.uomg.com/api/rand.img3*
-// @include      https://api.vvhan.com/api/tao*
-// @include      https://www.hlapi.cn/api/mjx*
-// @include      https://3650000.xyz/api/?*
-// @include      https://*
-// @include      http://*
+// @match        https://api.lolicon.app/setu/v2*
+// @match        https://api.nyan.xyz/httpapi/sexphoto*
+// @match        https://huanmengii.xyz/ZY/aCOS/cos*
+// @match        https://api.uomg.com/api/rand.img3*
+// @match        https://api.vvhan.com/api/tao*
+// @match        https://www.hlapi.cn/api/mjx*
+// @match        https://3650000.xyz/api/?*
+// @match        *://*/*
 // @icon         data:image/jpg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAgACADASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAABgcICQX/xAAsEAABAwMEAQIFBQEAAAAAAAABAgMEBQYRAAcSITEIQRMUIjJRIyRCYYHB/8QAFgEBAQEAAAAAAAAAAAAAAAAABgQF/8QAIxEAAgEDBAEFAAAAAAAAAAAAAQMCABESBCFBUQUVMWHB8P/aAAwDAQACEQMRAD8AHNrPQdFYZlXBX6fJuRqns/NhptIUmSodhCG0nsdeCcqOAPOnVLvK3r227YVFjy6OEpLaWavEMKU2cY4utn7eseMjAHeq7vuaxtDs/VnaRSG6nIp9MffjwnMhD7jTKlpQsgZ7KcfnWQFv+sO6d0txKOxcFuw7ibqUpDUmPT4vwnWStQT+ksKJPHOfqB6Hf50Qd4vUOjlKWUj3x8Dik6PIJhO2Nojr7qo6fGtG1YUVNSrcJMl7PAzpjcZtPXkKUQCP+6CNz7Ttq+rdmP1iOKnDhq5iTBd5OMjoFbS0+evbvIGmfbm2dgVrcmq29W4MauJSwWYqpzaHUK4r+ocVAgE9eOzpmVnYaj2zt4qZQ4saOWnlhuBGYRHa+AnyPhoAGcknx3qD05qEiUY2MeR+vWgNeljTAm4l3T6vCDG3k2YffoFQfDdRhplQ5UNYK1j7hxPvyHX+6yhqm3tV2XuqrV2mJpLkpt1TiXFMltb5UMlOBnifOR1351f3owrEmgekbb52mKXVG2qU0ostjms9q5cO++8jGkp6lrQtLca6H7lp8gUCsrBcqESYSxyUPKig/wAseT76ZLcJQBB3omV4zsfapo2gq993nuhR6vUGl01EV/5pNOhO/uJCgfpSpRGG289n+vfV/wBs3LMNoNxn1olzo6HEvSgrkyHVrJWEqx2lOeIPvjU02Kzbe3VBkvPzIkl+SOSni5kke3+f1jXN3i9Vsdi2GqDakOUoBHFElCShAI8qB/GfbUmoeFrMb7mrFJLGAgbCv//Z
 // @grant        GM_addStyle
 // @grant        GM_setValue
 // @grant        GM_getValue
-// @grant        GM_deleteValue
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
 // @run-at       document-idle
 // @license      MIT
 // ==/UserScript==
-
+if (window.top != window.self) {
+    return;
+}
 
 (function() {
     'use strict';
@@ -37,7 +35,7 @@
         "api.lolicon.app":{
             include: /setu\/v2/i,
             name:"Lolicon ACG SexyPic",
-            url:"https://api.lolicon.app/setu/v2?r18=1&num=5",
+            url:"https://api.lolicon.app/setu/v2?r18=1&num=10",
             luckyUrl:["https://api.lolicon.app/setu/v2?r18=0&num=5",
                      "https://api.lolicon.app/setu/v2?r18=1&num=5",
                      "https://api.lolicon.app/setu/v2?r18=2&num=5"],
@@ -81,9 +79,10 @@
             }
         },
         "api.nyan.xyz":{
+            hide: true,
             include: /httpapi\/sexphoto/i,
             name:"Nyan ACG SexyPic",
-            url:"https://api.nyan.xyz/httpapi/sexphoto/?r18=true&num=5",
+            url:"https://api.nyan.xyz/httpapi/sexphoto/?r18=true&num=10",
             luckyUrl:["https://api.nyan.xyz/httpapi/sexphoto/?r18=true&num=5",
                      "https://api.nyan.xyz/httpapi/sexphoto/?r18=false&num=5"],
             run:()=>{
@@ -123,11 +122,11 @@
             }
         },
         "buyersShow":{
-            include: /api\/(rand|tao|mjx1)/i,
+            include: /api\/(rand|tao|mjx1|taobaoBuyerShow)/i,
             name:"Taobao Buyers Show",
             urls:["https://api.uomg.com/api/rand.img3?format=json&num=15",
-                 "https://api.vvhan.com/api/tao?type=json&num=15",
-                 "https://www.hlapi.cn/api/mjx1?type=json&num=15"],
+                 "https://api.suxun.site/api/tao?type=json&num=15",
+                 "https://api.03c3.cn/api/taobaoBuyerShow?type=json&num=15"],
             run:()=>{
                 r18Check.style.display=sfwCheck.style.display=r18CheckLabel.style.display=sfwCheckLabel.style.display="none";
                 var searchNum=getSearchParam("num");
@@ -146,6 +145,7 @@
             }
         },
         "huanmengii.xyz":{
+            hide: true,
             include: /ZY\/aCOS\/cos/i,
             name:"Cosplay Show",
             url:"https://huanmengii.xyz/ZY/aCOS/cos/?type=json&num=15",
@@ -177,16 +177,16 @@
         "3650000.xyz":{
             include: /\/api\/\?type=json/i,
             name:"3650000",
-            url:"https://3650000.xyz/api/?type=json&mode=7&num=15",
-            luckyUrl:["https://3650000.xyz/api/?type=json&num=15",
-                     "https://3650000.xyz/api/?type=json&mode=1&num=15",
-                     "https://3650000.xyz/api/?type=json&mode=2&num=15",
-                     "https://3650000.xyz/api/?type=json&mode=3&num=15",
-                     "https://3650000.xyz/api/?type=json&mode=66&num=15",
-                     "https://3650000.xyz/api/?type=json&mode=5&num=15",
-                     "https://3650000.xyz/api/?type=json&mode=7&num=15",
-                     "https://3650000.xyz/api/?type=json&mode=8&num=15",
-                     "https://3650000.xyz/api/?type=json&mode=9&num=15"],
+            url:"https://3650000.xyz/api/?type=json&mode=7&num=6",
+            luckyUrl:["https://3650000.xyz/api/?type=json&num=6",
+                     "https://3650000.xyz/api/?type=json&mode=1&num=6",
+                     "https://3650000.xyz/api/?type=json&mode=2&num=6",
+                     "https://3650000.xyz/api/?type=json&mode=3&num=6",
+                     "https://3650000.xyz/api/?type=json&mode=5&num=6",
+                     "https://3650000.xyz/api/?type=json&mode=6&num=6",
+                     "https://3650000.xyz/api/?type=json&mode=7&num=6",
+                     "https://3650000.xyz/api/?type=json&mode=8&num=6",
+                     "https://3650000.xyz/api/?type=json&mode=9&num=6"],
             run:()=>{
                 r18Check.style.display=sfwCheck.style.display=r18CheckLabel.style.display=sfwCheckLabel.style.display="none";
                 var searchNum=getSearchParam("num");
@@ -216,8 +216,8 @@
                     ["Weibo","1"],
                     ["Instagram","2"],
                     ["Cosplay","3"],
-                    ["Nsfw","66"],
                     ["Mtcos","5"],
+                    ["Mtcos2","6"],
                     ["Legs","7"],
                     ["MoreCoser","8"],
                     ["Tuwan","9"]
@@ -225,7 +225,7 @@
                 modeObj.forEach(item=>{
                     var option=document.createElement("option");
                     option.value=item[1];
-                    option.innerHTML=item[0];
+                    option.innerText=item[0];
                     if(item[1]==searchMode){
                         option.selected=true;
                     }
@@ -238,13 +238,23 @@
         "api.uomg.com":"buyersShow",
         "api.vvhan.com":"buyersShow",
         "www.hlapi.cn":"buyersShow",
-        "api.ghser.com":"buyersShow"
+        "api.ghser.com":"buyersShow",
+        "api.03c3.cn":"buyersShow",
+        "api.suxun.site":"buyersShow"
     };
+    var customRule=GM_getValue("RSPrules") || {};
+    var customRuleArr=[];
+    for(var j in customRule){
+        let href=customRule[j];
+        customRuleArr.push(href);
+    }
     GM_registerMenuCommand("I am feeling lucky", ()=>{
         var luckyUrls=[],targetUrl;
         for(var i in setuConfig){
             let sc=setuConfig[i];
-            if(sc.luckyUrl){
+            if(sc.hide){
+                continue;
+            }else if(sc.luckyUrl){
                 luckyUrls=luckyUrls.concat(sc.luckyUrl);
             }else if(sc.urls){
                 luckyUrls=luckyUrls.concat(sc.urls);
@@ -252,15 +262,42 @@
                 luckyUrls.push(sc.url);
             }
         }
+        luckyUrls=luckyUrls.concat(customRuleArr);
         var randomIndex=Math.floor(Math.random()*luckyUrls.length);
         targetUrl=luckyUrls[randomIndex];
         location.href=targetUrl;
     });
+    const _unsafeWindow = (typeof unsafeWindow == 'undefined') ? window : unsafeWindow;
+    const escapeHTMLPolicy = (_unsafeWindow.trustedTypes && _unsafeWindow.trustedTypes.createPolicy) ? _unsafeWindow.trustedTypes.createPolicy('rspp_default', {
+        createHTML: (string, sink) => string
+    }) : null;
+
+    function createHTML(html) {
+        return escapeHTMLPolicy ? escapeHTMLPolicy.createHTML(html) : html;
+    }
+    if (location.href.indexOf("randomsexypicparser") != -1) {
+        GM_addStyle(".discussion-rating{display:none}");
+    }
     var curConfig=setuConfig[document.domain],jsonData,hasFloatImg=false,grabed=false,oClient;
+    if(curConfig){
+        if(!curConfig.run){
+            curConfig=setuConfig[curConfig];
+        }
+        if(curConfig.include && !curConfig.include.test(location.href)){
+            curConfig=false;
+        }
+    }
     if(!curConfig){
-        GM_registerMenuCommand("Parse current api", customSet);
-        var customRule=GM_getValue("RSPrules_"+document.domain+location.pathname);
-        if(customRule){
+        let currentParsing=customRule[document.domain+location.pathname];
+        if(!currentParsing){
+            GM_registerMenuCommand("Parse current api", customSet);
+            return;
+        }else{
+            GM_registerMenuCommand("Stop parse api", () => {
+                delete customRule[document.domain+location.pathname];
+                GM_setValue("RSPrules", customRule);
+                location.reload();
+            });
             curConfig={run:()=>{
                 var searchNum=getSearchParam("num");
                 var leftNum=searchNum;
@@ -281,6 +318,7 @@
                         checkJson(data);
                     }
                     if(picUrls){
+                        picUrls=picUrls.filter((item, index) => picUrls.indexOf(item) === index);
                         picUrls.forEach(url=>{
                             leftNum--;
                             createImg(unescape(url));
@@ -288,29 +326,48 @@
                     }
                 }
                 parsePics(jsonData);
-                processByTime(leftNum,loadNum=>{
+                processByTime(leftNum||1, loadNum=>{
+                    let href=location.href.replace(/num=\d+(&time=\d+)?/,"num="+loadNum+"&time="+Date.now()),postParams=href.match(/#p{(.*)}/);
+                    if(postParams){
+                        postParams=postParams[1];
+                        href=href.replace(/#p{.*/,"");
+                    }
                     GM_xmlhttpRequest({
-                        method: 'GET',
-                        url: location.href.replace(/num=\d+/,"num="+loadNum),
+                        method: postParams?'POST':'GET',
+                        data: postParams,
+                        headers: {
+                            'Referer': location.href,
+                            "Content-Type": (postParams ? "application/x-www-form-urlencoded" : "text/html") + ";charset=" + (document.characterSet || document.charset || document.inputEncoding),
+                        },
+                        url: href,
                         timeout:15000,
                         onload: function(result) {
                             var parseData;
                             try{
                                 parseData=JSON.parse(result.responseText);
+                                console.log(parseData);
                             }catch(e){
                                 parseData=result.responseText;
                             }
                             parsePics(parseData);
                         }
                     });
-                },5,1000);
+                }, (leftNum < searchNum - 1 ? 5 : 1), 1000);
             },
             getSearch:(param)=>{
                 var href=location.href;
                 if(/\bnum=/.test(href)){
-                    href=href.replace(/\bnum=\d+/,"num="+param.num);
+                    href=href.replace(/\bnum=\d+(&time=\d+)?/,"num="+param.num+"&time="+Date.now());
                 }else{
-                    href+=(href.indexOf("?")==-1?"?":"&")+"num="+param.num;
+                    if(href.indexOf("?")==-1){
+                        if(href.indexOf("#")==-1){
+                            href+="?num="+param.num+"&time="+Date.now();
+                        }else{
+                            href=href.replace("#","?num="+param.num+"&time="+Date.now()+"#");
+                        }
+                    }else{
+                        href+="&num="+param.num+"&time="+Date.now();
+                    }
                 }
                 return href;
             },
@@ -318,12 +375,7 @@
                 var searchNum=getSearchParam("num");
                 numInput.value=searchNum;
             }};
-        }else return;
-    }else if(!curConfig.run){
-        curConfig=setuConfig[curConfig];
-    }
-    if(curConfig && curConfig.include && !curConfig.include.test(location.href)){
-        return;
+        }
     }
     document.title=curConfig.name?curConfig.name:"Random Sexy Pictures";
     try{
@@ -332,15 +384,15 @@
             var curNode = document.body.childNodes[i];
             if (curNode.nodeType == 1 || curNode.nodeName == "PRE") {
                 firstText = curNode.nodeValue || curNode.innerText;
-                break;
+                if (firstText) break;
             }
         }
-        jsonData=JSON.parse(firstText);
+        if(firstText)jsonData=JSON.parse(firstText);
     }catch(e){
         console.log(e);
-        jsonData = firstText;
+        jsonData=firstText;
     }
-    document.body.innerHTML="";
+    document.body.innerHTML=createHTML("");
     var imgCon=document.createElement("div");
     var btns=document.createElement("div");
     var numInput=document.createElement("input");
@@ -354,9 +406,10 @@
     var viewportMeta=document.createElement("meta");
     var overMask=document.createElement("div");
     var homepage=document.createElement("a");
+    var lightBtn=document.createElement("span");
     for(var name in setuConfig){
         var config=setuConfig[name];
-        if(!config.name)continue;
+        if(config.hide || !config.name)continue;
         var siteA=document.createElement("a");
         var url=config.url;
         if(config.urls){
@@ -365,8 +418,14 @@
             config.url=url;
         }
         siteA.href=url;
-        siteA.innerHTML=config.name;
+        siteA.innerText=config.name;
         btns.appendChild(siteA);
+    }
+    if(customRuleArr.length){
+        var otherSiteA=document.createElement("a");
+        otherSiteA.href=customRuleArr[Math.floor(Math.random()*customRuleArr.length)];
+        otherSiteA.innerText="Other";
+        btns.appendChild(otherSiteA);
     }
     btns.appendChild(numInput);
     btns.appendChild(r18Check);
@@ -376,6 +435,7 @@
     btns.appendChild(modeSelect);
     btns.appendChild(submit);
     btns.appendChild(homepage);
+    btns.appendChild(lightBtn);
     overMask.className="over-mask";
     imgCon.appendChild(overMask);
     referrerMeta.name="referrer";
@@ -455,7 +515,7 @@
         img.className="list-show";
         grabHandler(img,false);
         img.style.cursor="";
-        img.scrollIntoView();
+        img.scrollIntoView({ block: "center", inline: "center" });
     }
 
     function createImg(url){
@@ -472,6 +532,13 @@
                 return;
             }
             window.scrollTo(0,0);
+            var de=document.documentElement;
+            var body=document.body;
+            var backCompat=document.compatMode=='BackCompat';
+            var windowSize={
+                h: backCompat ? body.clientHeight : de.clientHeight,
+                w: backCompat ? body.clientWidth : de.clientWidth,
+            };
             if(img.style.zIndex==2){
                 restoreImg(img);
             }else if(img.style.zIndex==1){
@@ -490,7 +557,7 @@
                 hasFloatImg=img;
                 document.body.style.overflow="hidden";
                 img.style.bottom=0;
-                if(img.naturalWidth>document.documentElement.clientWidth || img.naturalHeight>document.documentElement.clientHeight){
+                if(img.naturalWidth>windowSize.w || img.naturalHeight>windowSize.h){
                     img.style.zIndex=1;
                     img.style.maxWidth="99%";
                     img.style.maxHeight="99%";
@@ -542,11 +609,10 @@
 
     function customSet(){
         if(window.confirm("Parse current api?")){
-            GM_setValue("RSPrules_"+document.domain+location.pathname, true);
-        }else{
-            GM_deleteValue("RSPrules_"+document.domain+location.pathname)
+            customRule[document.domain+location.pathname]=location.href;
+            GM_setValue("RSPrules", customRule);
+            location.reload();
         }
-        location.reload();
     }
 
     GM_addStyle(`
@@ -572,6 +638,11 @@
     }
     body{
       background: black;
+      scrollbar-width: none;
+    }
+    body::-webkit-scrollbar {
+      width: 0 !important;
+      height: 0 !important;
     }
     .btns>select{
       display: none;
@@ -606,18 +677,25 @@
     }
     .list-show:hover,.list-show.hover{
       opacity: 1;
+      transform: scale(1.05);
     }
     .list-show{
       opacity: 0.6;
-      transition: opacity .3s ease-in-out;
-      -moz-transition: opacity .3s ease-in-out;
-      -webkit-transition: opacity .3s ease-in-out;
+      transition: opacity .3s ease-in-out, transform .3s;
+      -moz-transition: opacity .3s ease-in-out, transform .3s;
+      -webkit-transition: opacity .3s ease-in-out, transform .3s;
     }
     .img-con{
         overflow-x: hidden;
         overflow: auto;
         width: 100%;
+        min-height: calc(100vh - 70px);
         display: block;
+        scrollbar-width: none;
+    }
+    .img-con::-webkit-scrollbar {
+      width: 0 !important;
+      height: 0 !important;
     }
     .img-con>img{
       -webkit-column-break-inside: avoid;
@@ -660,9 +738,20 @@
       font-weight: bold;
       text-decoration: none;
       margin: 1px;
+      font-family: Arial,Helvetica,sans-serif;
     }
     .btns>a:hover{
       background: #ffa31a;
+    }
+    .btns>a>span{
+      background: #2f2f2f;
+      color: white;
+      padding: 5px;
+      margin: 0 5px 0 -5px;
+      border-radius: 5px 0 0 5px;
+    }
+    .btns>a:hover>span{
+      background: #3f3f3f;
     }
     .btns>label{
       background: #f8981e;
@@ -695,8 +784,21 @@
       vertical-align: top;
       margin: 0 5px;
     }
+    .btns>span{
+      right: 10px;
+      font-size: x-large;
+      position: absolute;
+      cursor: pointer;
+      filter: brightness(0.5);
+    }
+    .lighted>.btns>span{
+      filter: none;
+    }
     .btns>button:hover{
       transform: scale3d(1.1, 1.1, 1.1);
+    }
+    .lighted>.img-con>img.list-show{
+      opacity: 1;
     }
     .btns>button{
       cursor: pointer;
@@ -714,20 +816,20 @@
 
     btns.className="btns";
     document.body.appendChild(btns);
-    homepage.innerHTML="Homepage";
+    homepage.innerHTML=createHTML("<span>Home</span>page");
     homepage.href="https://sleazyfork.org/en/users/8227-hoothin";
     homepage.target="_blank";
     numInput.type="number";
     numInput.title=numInput.placeholder="Num of sexy pictures";
     r18Check.type="checkbox";
     r18Check.id="r18Check";
-    r18CheckLabel.innerHTML="R18 ";
+    r18CheckLabel.innerText="R18 ";
     r18CheckLabel.htmlFor="r18Check";
     sfwCheck.type="checkbox";
     sfwCheck.id="sfwCheck";
-    sfwCheckLabel.innerHTML="SFW ";
+    sfwCheckLabel.innerText="SFW ";
     sfwCheckLabel.htmlFor="sfwCheck";
-    submit.innerHTML="Refresh";
+    submit.innerText="Refresh";
     submit.onclick=submitParam;
     document.onkeyup = function(e) {
         var event = e || window.event;
@@ -736,6 +838,10 @@
             submitParam();
         }
     };
+    lightBtn.innerText="💡";
+    lightBtn.onclick=e=>{
+        document.body.classList.toggle("lighted");
+    }
 
     imgCon.className="img-con";
     document.body.appendChild(imgCon);
