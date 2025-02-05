@@ -7,7 +7,7 @@
 // @description:zh-TW 一鍵離綫下載 - 一鍵自動將磁鏈、bt種子或其他下載資源離綫下載至網盤
 // @namespace    https://github.com/hoothin/UserScripts/tree/master/Easy%20offline
 // @require      http://code.jquery.com/jquery-1.7.2.min.js
-// @version      1.9.37
+// @version      1.9.41
 // @author       Hoothin
 // @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAQlBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////8IX9KGAAAAFXRSTlMAwT7hFahN0LZWJgqIavB7YJuRdDPJsaCPAAAA6ElEQVQ4y8WRW5aEIAxEDUGgAQUftf+tjgYOjcPMb3d96Im5pkIxfVgmOuY5mX/afkYVqb/6EXDGh+CNA7axvwOvZrUiDfalX6UY5y+AkZ687Ut9WNgw9SLYQ3cDYfNz4kIAq2Z/wYN0AiSRQN16iroMXnD3K2F+f1oBLK2ckeWpmjFEsc2Tfxn6ndUBLGgjNVgAX8oNa56AO8dKeAEccnW89ruB6bQVWGTL2IcmQJOTdXSdOAIRrMtxsekR8AQ5XyHARLTrAhi6xH0iYWfcOguQpeAtPJJXSvlqEdSl4XaGHb4HEE0f1w+Jcw2XCZjSwgAAAABJRU5ErkJggg==
 // @match        *://*/*
@@ -88,16 +88,18 @@
             bgImg:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAABjFBMVEX////7+/v+/v/8/Pwyf/wzc/w0bvza5f4xffz5+//0+P8ybPz8/f4yevw0cPwza/z39/cwe/UxdfzSPyr4+v/2+f/m7/53nv0vf/wvce9pof1tlPwxf/gzfPYwePPp8f7Z5/7S4v7P4P7L3f7I2f2Gtf2Rr/1hkP0yd/1FiPwygfxAdPxspftYkvUtc/Dg6f7C2f7F1f54oP1flf0/hfwsbu7i7f/w9f7b5v7X5f7V4v6nyv6oxv6jwP6Ns/2Lsf1/rv1+ov1zof1xof10nf1jm/1djP0xe/2NufxalvxHj/xPhvxKgPxHffw+efw0ePyXu/mqxPg5hfiTtvdyo/dgmfdOj/dBhfVflfQvefT+9fOIqvMyefNMhvFIgO9MeePyycVjZbzKb3DaZVa/Q0Dx9f+Bp/1olv1gkPw0dvzg6Pu2zPk0gflNjPctc/c9gfX88/JJfO3n3+ni2unHxuSGktNpdtBJY8paashRW71nXqp7YpyDYJKpaIKPU33AVFXARkTVTTvFQjrUPypKwHq1AAACAklEQVQ4y4WTB3OqQBSFF3BpAk+KIBixJ2rs0fTee68vvbzee+9//O1Cio46npmFPfd8d2cY9gIASMJHUESDKFQmAZJAUKCFKELA/WSr3A3d/tZnAF99C8fVHYhiosbxxflsdr7I15SIWiCe3exA2szGmwOJXTkUkvHaTTQD9NyBLO/t7OzJ8kFObwKs2/bRdrSvL7p9ZNvrjQC/n8/nwngXzuXz+3wDED42zS13u2Wax+EGQD+pmhvudsOsnuj1gBAZSp5+/XRIYkMeVu1XyaGIcAfoycVM4Pn3qx9vcW3gRUcmE8gsJvUboNfyeDyBwLd/6sX7wtNnC45DD6vXBbRx1sOmrQ+/VFX9efomhFzFstLoNa45QKzCijMx/vXZpar+/fKSZecWijwfmxHZSgzFFBgWxXQUIJ39UX9/nhPFngHsomlRHEYxRY6mlCkOl+5fXp2vraV6IgCLm1JSoyQGxhRlUnCAi/PUEwXnWMKkooxhAIxAuNSPS+8+Qgi7GOB3zutfgnAExQSIr0JoMJw2GJSghPLSo4eDGscYEK7Gna/gy7QkLRvTK5JEP2bAgy4vvTJtLCNX5h0AMLNemvbihfqBv3zjZpHDACKM7ntI3RMFgFSYcJ3B3P0sf6kzGOxM+AFwXAK7kuNurz2pcWTt7deuna/t4LQdvbbD23b8/wPY0UTO99dD5gAAAABJRU5ErkJggg==",
             offFunc:function(delLink){
                 var gsi = setInterval(function() {
-                    var newOffBtn = document.querySelector('div[data-id=downloadLink]>span');
+                    var newOffBtn = document.querySelector('[data-id=downloadLink]');
                     if(newOffBtn){
                         clearInterval(gsi);
                         newOffBtn.click();
                         var bsl = setInterval(function() {
+                            newOffBtn.click();
                             var offLink=document.querySelector('div.nd-download-link div[role=dialog] input');
                             if(offLink){
                                 clearInterval(bsl);
                                 var beginOffline=function(){
                                     if(curlink.length===0)return;
+                                    offLink=document.querySelector('div.nd-download-link div[role=dialog] input');
                                     if(Object.prototype.toString.call(curlink) === '[object Array]')
                                         offLink.value = curlink.shift();
                                     else{
@@ -128,7 +130,7 @@
                                             }
                                         }, 200);
                                     }
-                                };beginOffline();
+                                };setTimeout(()=>beginOffline(),500);
                             }
                         }, 500);
                     }
@@ -384,118 +386,41 @@
             },
             bgImg:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAA9lBMVEUAAACgoqOipKUAAAC4ubq1traXl5jX19g9PT4GBga2t7ixsrOur7Cmp6jMzM1+f39ZWVpnZ2eChIXMzc3BwcKvsrLGxsacnZ3f399zdHS9vr61trZZW1upq6vIysq7vb2nqKliZGTS09O6vLzg4OC2uLhQUVHi4uK+v79OTk4hISHT1NQZGRnf4OCPkpKsra3KysxmZ2d+f3/y8vOUlZW+vr+2tridnp/Z2dmAgYJ4enptbm5YWVn39/fv7/DDw8Td3d7U1dXU1NTOztC4ubuoqamlpaWcnJyYmJp6fHxwcXFTVVX29/bHyMnHx8e3t7qgoaGHiYm1AxJpAAAAL3RSTlMAHhgF4NbW2jQU4uDg3sybVDUkHhcF6Ojk5ODc2dfJycPDra17ezkuLiUlIRUREf6sWL0AAAC0SURBVBjTjY9HEoJAAAQXVwVzAMw5Z5YMgoBizv7/M7JwoLw5t+lD1wzAYVcEPaeXLAgyHvTazTpJtvrDCe5M1nUReiiK/ERZxgNEVLYdy1GFz1uuET54IfGucTq/5qIYRGIKEjcaJ3ggFsEgrp/tnSwZJi/EMSDSqqQeJeNmXk+pwLFHlrg9CPzl16H/7ygmQ0eyCACkMuGODAUBTORzHbJSKlcb3Vw+AfE9uJgWCiNq5rcvfNwgjdumYdQAAAAASUVORK5CYII="
         },
-        PikPak:{
-            regex:/mypikpak\.com/,
-            url:"http://user.mypikpak.com/",
-            bgColor:"2265ff",
+        putio:{
+            regex:/app\.put\.io/,
+            url:"https://app.put.io/files",
+            bgColor:"313131",
             noTxt:true,
-            linkRegExp: /^magnet:\?xt|^PikPak:\/\/|\.(torrent|mp4|mp3|rar|7z|zip|rmvb|mkv|avi|iso)$/i,
-            directUrl:function(offUrl){
-                //此段代码引用自 mumuchenchen 大佬的 PikPak 保存助手 https://greasyfork.org/scripts/435219
-                //mumuchenchen 的第三方 Pikpak 网页客户端 推荐大家前往 fork https://github.com/mumuchenchen/pikpak
-                storage.getItem("pikpakUserInfo",info=>{
-                    if(!info){
-                        let userName=prompt(i18n("userName"));
-                        if(!userName)return;
-                        let userPass=prompt(i18n("userPass"));
-                        if(!userPass)return;
-                        info={userName:userName,userPass:userPass};
-                        storage.setItem("pikpakUserInfo",info);
+            offFunc:function(delLink){
+                var rsc = setInterval(function(){
+                    var offBtn=document.querySelector('.new-transfer-cta>button');
+                    if(offBtn){
+                        clearInterval(rsc);
+                        var wsc = setInterval(function() {
+                            offBtn.click();
+                            var textarea=document.querySelector('textarea.mantine-Textarea-input');
+                            var root=document.querySelector('.mantine-Skeleton-root');
+                            if(textarea && root && root.innerText.indexOf('Loading')==-1){
+                                clearInterval(wsc);
+                                let lastValue = textarea.value;
+                                textarea.value=curlink;
+                                let tracker = textarea._valueTracker;
+                                if (tracker) {
+                                    tracker.setValue(lastValue);
+                                }
+                                let inputevent = new Event('input', { bubbles: true });
+                                textarea.dispatchEvent(inputevent);
+                                var event = document.createEvent('HTMLEvents');
+                                event.initEvent("input", false, true);
+                                textarea.dispatchEvent(event);
+                                document.querySelector('.modal-footer-action>button').click();
+                                delLink();
+                            }
+                        },200);
                     }
-                    var postUrl=()=>{
-                        let postData;
-                        if(offUrl.indexOf('PikPak://') === 0) {
-                            const urlData = offUrl.substring(9).split('|')
-                            postData = {
-                                kind: "drive#file",
-                                name: urlData[0],
-                                size: urlData[1],
-                                hash: urlData[2],
-                                upload_type: "UPLOAD_TYPE_RESUMABLE",
-                                objProvider: {
-                                    provider: "UPLOAD_TYPE_UNKNOWN"
-                                }
-                            }
-                        } else {
-                            postData = {
-                                kind: "drive#file",
-                                name: "",
-                                upload_type: "UPLOAD_TYPE_URL",
-                                url: {
-                                    url: offUrl
-                                },
-                                params: {"from":"file"},
-                                folder_type: "DOWNLOAD"
-                            }
-                        }
-                        _GM_xmlhttpRequest({
-                            method: 'POST',
-                            url: 'https://api-drive.mypikpak.com/drive/v1/files',
-                            data: JSON.stringify(postData),
-                            headers: {
-                                authorization: info.loginInfo.token_type + ' ' + info.loginInfo.access_token
-                            },
-                            onload: (res) => {
-                                if(res.status === 200) {
-                                    _GM_notification("Task OK");
-                                } else if(res.status === 401) {
-                                    info.loginInfo=null;
-                                    storage.setItem("pikpakUserInfo",info);
-                                    const msg = JSON.parse(res.responseText).error_description;
-                                    alert(msg);
-                                } else if(res.status === 400) {
-                                    const msg = JSON.parse(res.responseText).error_description;
-                                    alert(msg);
-                                } else if(res.status === 403) {
-                                    const msg = JSON.parse(res.responseText).error_description;
-                                    alert(msg);
-                                }
-                            }
-                        })
-                    };
-                    if(!info.loginInfo || info.loginInfo.expires < new Date().getTime()){
-                        _GM_xmlhttpRequest({
-                            method: 'POST',
-                            url: 'https://user.mypikpak.com/v1/auth/signin',
-                            data: JSON.stringify({
-                                "client_id": "YNxT9w7GMdWvEOKa",
-                                "client_secret": "dbw2OtmVEeuUvIptb1Coyg",
-                                "password": info.userPass,
-                                "username": info.userName
-                            }),
-                            headers: {
-                                'user-agent': 'accessmode/ devicename/Netease_Mumu appname/android-com.pikcloud.pikpak cmd/login appid/ action_type/ clientid/YNxT9w7GMdWvEOKa deviceid/56e000d71f4660700ca974f2305171c5 refresh_token/ grant_type/ networktype/WIFI devicemodel/MuMu accesstype/ sessionid/ osversion/6.0.1 datetime/1636364470779 sdkversion/1.0.1.101600 protocolversion/200 clientversion/ providername/NONE clientip/ session_origin/ devicesign/div101.56e000d71f4660700ca974f2305171c5b94c3d4196a9dd74e49d7710a7af873d platformversion/10 usrno/null'
-                            },
-                            onload: (res) => {
-                                if(res.status === 200) {
-                                    info.loginInfo=JSON.parse(res.responseText);
-                                    if(!info.loginInfo.expires && info.loginInfo.expires_in){
-                                        info.loginInfo.expires = new Date().getTime() + 1000 * info.loginInfo.expires_in;
-                                    }
-                                    storage.setItem("pikpakUserInfo",info);
-                                    postUrl();
-                                } else if(res.status === 401) {
-                                    storage.setItem("pikpakUserInfo","");
-                                    const msg = JSON.parse(res.responseText).error_description;
-                                    alert(msg);
-                                } else if(res.status === 400) {
-                                    storage.setItem("pikpakUserInfo","");
-                                    const msg = JSON.parse(res.responseText).error_description;
-                                    alert(msg);
-                                } else if(res.status === 403) {
-                                    storage.setItem("pikpakUserInfo","");
-                                    const msg = JSON.parse(res.responseText).error_description;
-                                    alert(msg);
-                                }
-                            }
-                        })
-                    }else{
-                        postUrl();
-                    }
-                });
-                return false;
+                },1000);
             },
-            bgImg:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAYFBMVEUAAAArbP5MdNFMdNIrbP4sbP1QdctQdcwvbv////8dYf8sbP9smP/09/8qaf/V4f8iZf/u8/+lwP+duv+UtP+PsP9hkP92n/9nlP/K2v/F1v+7z/+Ytv9Wif9Aef91nv9e7pgKAAAACHRSTlMA+puT/PWHhQBB7XEAAACQSURBVBjTTY8JCsQwCEWdrjFm37p37n/LMdAJfSTgf4IoAPQf8fDpgek4N9NxnwQZJx0/w+UMNd/XV6nluqsBQbRp79Xqvd7ICBCuaHuElMJhdXEspMKGko/YA2LYXyKuiGt8Ca3rfwm052nbjILV1IyFBZFZck4xppwXQ8Srk2wQzXzcIBpDB8w0/vM4AfwACl4LKjajMX0AAAAASUVORK5CYII="
+            bgImg:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAABcVBMVEUwMDAtLS09PT0AAAA5OTkwMDA2NjY2NjZ0dHQyMjIxMTH////8/P37+/v+/v35+fk0NDQzMzIiIiIvLzCUlJQ2NDIqKzAgIy8oKCgmJibk5OVQUFFHQjP09PSnp6gmKTAqKiokJCT29vWhoaGMj5tra2tSUlXqwkI6OjuehDo3NjYjJi+Abi4uLi4sLC3f39/Y2NrKy9C5ur62uLqrrriqqqqTlZyZmZl0d4NfXlz/5khGRkb20EW9oD/Vsj6slT6nkz6PejvQrDlSSzhuYDevlTabgTKfgy98ai40MCdJPiAbHBz39/bv7+/q6urR0dLHx8fAwMCws7+vs76dnZ6UlpuFiJKKi4+Hh4dwcXJYXWxnZ2djY2NNTU391kr/2klMS0j/4Ef/10bwxkbvyETYuUA8PUBEQj/juj2iiDyPejy7nDqKdjq1lzmNeTl4aDlaUTdlWTZdUzWegjEZHi91Yy51Yi4NFS1gUihIPiIrJx+VLWttAAAACXRSTlP9+3IAnfahnwf3t+iJAAACD0lEQVQ4y31TB3viMAwV0BuxnRiTC0kgQNmb697tdVz37b333nv011euExLo9/WB41h6epJjC86OxIAQoh0DGgFOJ2DkFCgC0Qj+/SkgQBy6BNQaf2j0uQg5AYkBoD9giKSEIKSvBQTCBRGjxWIxVXQ0ETFCX10z3Wx5Op+ffuQ4QonKAWoD+Oy28jkqoU/MO6oWpaD8wlkcQ5/Ouc4ovedowdbBjzeT1ylnOkUwpDx0k4ME4ZYpNwyamRnnyDCu9VRlioDoNa6gOXf37b9v8xmDMVZ1ZZK+gjaaLRmczuy9frp8cF/HVJO7lhkSzGTqHGZg2ZX6D7PXOI/vU78vFkSogARDEta//hIkiQQ61blgW+YAQdfp7f+e1krVLmM5N3ZWbWtAgeqMlar77v7jDGWM3ums2mKIYDB6qXxrFv2GbtTWh1NgXmRIMNzPhLcUFhkSKBbCdcbp1TcfX2H8sRR4ElyqjDc2F760BRkukh4hNzbX+rzQTBPEkALPVyqVuWcbnfqLZtqURxglMG5M7m1tb/98V3+5vKHio596lpbozZ0nH9bWPn0n6YJ/UpHDqmVo7sHW+79t2y6gy48PrhwOd7Ga/fO82baEJWSEGsGlPbrRu5tLK15axapwVUNo8DxL+QMQv7vUC17LNBERd9A4pmLItVBT6NcAYnDGRBoibNBod3fjkIif0P6xeOIQIYVNqqOTMbQAAAAASUVORK5CYII="
         }
     };
     var enableUrl = 'a[href^="magnet"],[href^="ed2k://|file"],[href$=".torrent"],[href$=".mp4"],[href$=".rar"],[href$=".7z"],[href$=".zip"],[href$=".rmvb"],[href$=".mkv"],[href$=".avi"],[href$=".iso"],[href$=".exe"],[href$=".dmg"]';
@@ -503,190 +428,190 @@
     var disableUrl=[".torrentkitty.","bt.box.n0808.com"];
     var manageLinksLang={};
     var lang = navigator.appName=="Netscape"?navigator.language:navigator.userLanguage;
+    var config={};
+    switch (lang){
+        case "zh-CN":
+        case "zh-SG":
+            config={
+                configure:"全载设置",
+                yyw:"115网盘",
+                baidu:"百度网盘",
+                furk:"Furk网盘",
+                seedr:"Seedr网盘",
+                pcloud:"Pcloud网盘",
+                xunlei:"迅雷离线",
+                xunleipan:"迅雷网盘",
+                xiaomi:"小米路由器",
+                weiyun:"腾讯微云",
+                bitqiu:"比特球",
+                apiv:"九秒云播",
+                torrent:"Itorrents种子下载",
+                btcache:"Btcache.me种子下载",
+                enable:"启用",
+                disable:"禁用",
+                addIcon:"添加站点",
+                settingTitle:"全载",
+                urlRegexpTips:"自定义需要启用一键下载的链接正则，一行一条",
+                disableOnSite:"已于此站点禁用，点击启用",
+                bdPathTips:"不需要加'我的网盘/全部文件'",
+                bdPathTitle:"度盘存储路径：",
+                settingMouseOver:"仅当鼠标经过时显示图标",
+                settingBtn:"设置",
+                allDisableError:"不能全部禁用！",
+                siteRuleSetOK:"设置成功，刷新生效",
+                setOK:"设置成功",
+                regExpError:"含有无效正则，请重新输入",
+                addSiteRuleTitle:"自定义新增图标规则，一行一条",
+                siteRulePlaceholder:"站点 @@ 站名 @@ 下载链接正则 @@ 图标base64 @@ 图标背景颜色 @@ 是否隐藏图标\n\n@@ 分隔，目标站点中用 $url 代替目标链接，$hash 代表目标磁链的 hash 值，${reg}用正则提取，$text代表链接文本，$title代表链接title\n\n可用//注释规则\n\n例如：http://192.168.2.1/d2r?u=$url@@路由器下载\nhttp://xxx.com/magnet/$hash@@磁链下载@@^magnet@@data:image/png;base64,AAA@@ffffff",
+                inputLink:"输入需要离线下载的链接：",
+                importOrNot:"是否导入规则？",
+                importCustomAlert:"点击确定追加规则，点击取消覆盖规则",
+                importOver:"规则导入完毕!",
+                postOver:"发送成功，返回消息：",
+                copyOver:"复制成功！",
+                postError:"发送失败，错误内容：",
+                importCustomSame:"存在同名规则，是否覆盖？",
+                copyLinks:"嗅探下载资源",
+                noLinks:"当前页面没有资源！",
+                userName:"请输入用户账号",
+                userPass:"请输入用户密码",
+                seekKey:"嗅探快捷键："
+            };
+            manageLinksLang={
+                copyAll:"全部复制",
+                copySel:"复制选中",
+                addTips:"%i代表递增 %n代表文件名",
+                sortByName:"按文件名排序",
+                sortByUrl:"按网址排序",
+                sortByType:"按扩展名排序",
+                preHolder:"批量前缀",
+                nextHolder:"批量后缀",
+                closeBtn:"关闭",
+                typeHead:"类型："
+            };
+            break;
+        case "zh-TW":
+        case "zh-HK":
+        case "zh-MO":
+            config={
+                configure:"全載設置",
+                yyw:"115網盤",
+                baidu:"百度網盤",
+                furk:"Furk網盤",
+                seedr:"Seedr網盤",
+                pcloud:"Pcloud網盤",
+                xunlei:"迅雷離線",
+                xunleipan:"迅雷網盤",
+                xiaomi:"小米路由器",
+                weiyun:"騰訊微雲",
+                bitqiu:"比特球",
+                apiv:"九秒雲播",
+                torrent:"Itorrents種子下載",
+                btcache:"Btcache.me種子下載",
+                enable:"啟用",
+                disable:"禁用",
+                addIcon:"添加站點",
+                settingTitle:"全載",
+                urlRegexpTips:"自定義需要啟用一鍵下載的連結正則，一行一條",
+                disableOnSite:"已於此站點禁用，點擊啟用",
+                bdPathTips:"不需要加'我的網盤/全部文件'",
+                bdPathTitle:"度盤存儲路徑：",
+                settingMouseOver:"僅當滑鼠經過時顯示圖標",
+                settingBtn:"設置",
+                allDisableError:"不能全部禁用！",
+                siteRuleSetOK:"設置成功，刷新生效",
+                setOK:"設置成功",
+                regExpError:"含有無效正則，請重新輸入",
+                addSiteRuleTitle:"自定義新增圖標規則，一行一條",
+                siteRulePlaceholder:"站點 @@ 站名 @@ 下載鏈接正則 @@ 圖標base64 @@ 圖標背景顏色 @@ 是否隱藏圖標\n\n@@ 分隔，目標站點中用 $url 代替目標連結，$hash 代表目標磁鏈的 hash 值，${reg}用正则提取，$text代表連結文本，$title代表連結title\n\n可用//注釋規則\n\n例如：http://192.168.2.1/d2r?u=$url@@路由器下載\nhttp://xxx.com/magnet/$hash@@磁鏈下載@@^magnet@@data:image/png;base64,AAA@@ffffff",
+                inputLink:"輸入需要離線下載的連結：",
+                importOrNot:"是否導入規則？",
+                importCustomAlert:"點擊確定追加規則，點擊取消覆蓋規則",
+                importOver:"規則導入完畢!",
+                postOver:"發送成功，返回消息：",
+                copyOver:"複製成功！",
+                postError:"發送失敗，錯誤内容：",
+                importCustomSame:"存在同名規則，是否覆蓋？",
+                copyLinks:"嗅探下載資源",
+                noLinks:"當前頁面沒有資源！",
+                userName:"請輸入用戶賬號",
+                userPass:"請輸入用戶密碼",
+                seekKey:"嗅探快捷鍵："
+            };
+            manageLinksLang={
+                copyAll:"全部複製",
+                copySel:"複製選中",
+                addTips:"%i代表遞增 %n代表文件名",
+                sortByName:"按文件名排序",
+                sortByUrl:"按網址排序",
+                sortByType:"按擴展名排序",
+                preHolder:"批量前綴",
+                nextHolder:"批量後綴",
+                closeBtn:"關閉",
+                typeHead:"類型："
+            };
+            break;
+        default:
+            config={
+                configure:"Easy-Offline Configure",
+                yyw:"115",
+                baidu:"BaiduPan",
+                furk:"Furk",
+                seedr:"Seedr",
+                pcloud:"Pcloud",
+                xunlei:"Xunlei",
+                xunleipan:"XunleiPan",
+                xiaomi:"MiWifi",
+                weiyun:"Weiyun",
+                bitqiu:"bitqiu",
+                apiv:"Apiv Online play",
+                torrent:"Torrent download in itorrent.org",
+                btcache:"Torrent download in btcache.me",
+                enable:"Enable ",
+                disable:"Disable ",
+                addIcon:"Add new site",
+                settingTitle: "Easy Offline",
+                urlRegexpTips: "Customize the Link Regexp, one per line",
+                disableOnSite: "Disabled currently, click to enable",
+                bdPathTips: "No need to add'/all files'",
+                bdPathTitle: "Path of BDpan:",
+                settingMouseOver: "Display the icon only when the mouse passes over",
+                settingBtn: "Save",
+                allDisableError: "Cannot disable all!",
+                siteRuleSetOK: "Set successfully, refresh takes effect",
+                setOK: "Set successfully",
+                regExpError: "Contains invalid regularity, please re-enter",
+                addSiteRuleTitle: "Customize new icon rules, one per line",
+                siteRulePlaceholder: "site @@ sitename @@ link regexp @@ icon base64 @@ icon background color @@ hide icon\n\nUse @@ to separated, use $url for the target Link, $hash for the hash of the target magnet link, ${reg} for regexp result on link, $text for link text, $title for link title\n\nUse // to comment rule\n\nFor example: http://192.168.2.1/d2r?u=$url@@MyRouter\nhttp://xxx.com/magnet/$hash@@MyMagnetLinkDownload@@^magnet@@data:image/png;base64,AAA@@ffffff",
+                inputLink: "Enter the link that needs to be downloaded with this:",
+                importOrNot:"Do you want to import rules?",
+                importCustomAlert:"Ok to add rule，Cancel to cover rule",
+                importOver:"Rules import over!",
+                postOver:"Post over, return: ",
+                copyOver:"Copy over!",
+                postError:"Fail in post, error: ",
+                importCustomSame:"Rule exists, overwritten?",
+                copyLinks:"Seek downloadable links",
+                noLinks:"No links！",
+                userName:"Input user name",
+                userPass:"Input user pass",
+                seekKey:"Seek key: "
+            };
+            manageLinksLang={
+                copyAll: "Copy all",
+                copySel: "Copy selected",
+                addTips: "%i means increment, %n means file name",
+                sortByName: "Sort by name",
+                sortByUrl: "Sort by URL",
+                sortByType: "Sort by type",
+                preHolder: "Batch Prefix",
+                nextHolder: "Batch Suffix",
+                closeBtn: "Close",
+                typeHead: "Type:"
+            };
+            break;
+    }
     var i18n=(name)=>{
-        var config={};
-        switch (lang){
-            case "zh-CN":
-            case "zh-SG":
-                config={
-                    configure:"全载设置",
-                    yyw:"115网盘",
-                    baidu:"百度网盘",
-                    furk:"Furk网盘",
-                    seedr:"Seedr网盘",
-                    pcloud:"Pcloud网盘",
-                    xunlei:"迅雷离线",
-                    xunleipan:"迅雷网盘",
-                    xiaomi:"小米路由器",
-                    weiyun:"腾讯微云",
-                    bitqiu:"比特球",
-                    apiv:"九秒云播",
-                    torrent:"Itorrents种子下载",
-                    btcache:"Btcache.me种子下载",
-                    enable:"启用",
-                    disable:"禁用",
-                    addIcon:"添加站点",
-                    settingTitle:"全载",
-                    urlRegexpTips:"自定义需要启用一键下载的链接正则，一行一条",
-                    disableOnSite:"已于此站点禁用，点击启用",
-                    bdPathTips:"不需要加'我的网盘/全部文件'",
-                    bdPathTitle:"度盘存储路径：",
-                    settingMouseOver:"仅当鼠标经过时显示图标",
-                    settingBtn:"设置",
-                    allDisableError:"不能全部禁用！",
-                    siteRuleSetOK:"设置成功，刷新生效",
-                    setOK:"设置成功",
-                    regExpError:"含有无效正则，请重新输入",
-                    addSiteRuleTitle:"自定义新增图标规则，一行一条",
-                    siteRulePlaceholder:"站点 @@ 站名 @@ 下载链接正则 @@ 图标base64 @@ 图标背景颜色 @@ 是否隐藏图标\n\n@@ 分隔，目标站点中用 $url 代替目标链接，$hash 代表目标磁链的 hash 值，${reg}用正则提取，$text代表链接文本，$title代表链接title\n\n可用//注释规则\n\n例如：http://192.168.2.1/d2r?u=$url@@路由器下载\nhttp://xxx.com/magnet/$hash@@磁链下载@@^magnet@@data:image/png;base64,AAA@@ffffff",
-                    inputLink:"输入需要离线下载的链接：",
-                    importOrNot:"是否导入规则？",
-                    importCustomAlert:"点击确定追加规则，点击取消覆盖规则",
-                    importOver:"规则导入完毕!",
-                    postOver:"发送成功，返回消息：",
-                    copyOver:"复制成功！",
-                    postError:"发送失败，错误内容：",
-                    importCustomSame:"存在同名规则，是否覆盖？",
-                    copyLinks:"嗅探下载资源",
-                    noLinks:"当前页面没有资源！",
-                    userName:"请输入用户账号",
-                    userPass:"请输入用户密码",
-                    seekKey:"嗅探快捷键："
-                };
-                manageLinksLang={
-                    copyAll:"全部复制",
-                    copySel:"复制选中",
-                    addTips:"%i代表递增 %n代表文件名",
-                    sortByName:"按文件名排序",
-                    sortByUrl:"按网址排序",
-                    sortByType:"按扩展名排序",
-                    preHolder:"批量前缀",
-                    nextHolder:"批量后缀",
-                    closeBtn:"关闭",
-                    typeHead:"类型："
-                };
-                break;
-            case "zh-TW":
-            case "zh-HK":
-            case "zh-MO":
-                config={
-                    configure:"全載設置",
-                    yyw:"115網盤",
-                    baidu:"百度網盤",
-                    furk:"Furk網盤",
-                    seedr:"Seedr網盤",
-                    pcloud:"Pcloud網盤",
-                    xunlei:"迅雷離線",
-                    xunleipan:"迅雷網盤",
-                    xiaomi:"小米路由器",
-                    weiyun:"騰訊微雲",
-                    bitqiu:"比特球",
-                    apiv:"九秒雲播",
-                    torrent:"Itorrents種子下載",
-                    btcache:"Btcache.me種子下載",
-                    enable:"啟用",
-                    disable:"禁用",
-                    addIcon:"添加站點",
-                    settingTitle:"全載",
-                    urlRegexpTips:"自定義需要啟用一鍵下載的連結正則，一行一條",
-                    disableOnSite:"已於此站點禁用，點擊啟用",
-                    bdPathTips:"不需要加'我的網盤/全部文件'",
-                    bdPathTitle:"度盤存儲路徑：",
-                    settingMouseOver:"僅當滑鼠經過時顯示圖標",
-                    settingBtn:"設置",
-                    allDisableError:"不能全部禁用！",
-                    siteRuleSetOK:"設置成功，刷新生效",
-                    setOK:"設置成功",
-                    regExpError:"含有無效正則，請重新輸入",
-                    addSiteRuleTitle:"自定義新增圖標規則，一行一條",
-                    siteRulePlaceholder:"站點 @@ 站名 @@ 下載鏈接正則 @@ 圖標base64 @@ 圖標背景顏色 @@ 是否隱藏圖標\n\n@@ 分隔，目標站點中用 $url 代替目標連結，$hash 代表目標磁鏈的 hash 值，${reg}用正则提取，$text代表連結文本，$title代表連結title\n\n可用//注釋規則\n\n例如：http://192.168.2.1/d2r?u=$url@@路由器下載\nhttp://xxx.com/magnet/$hash@@磁鏈下載@@^magnet@@data:image/png;base64,AAA@@ffffff",
-                    inputLink:"輸入需要離線下載的連結：",
-                    importOrNot:"是否導入規則？",
-                    importCustomAlert:"點擊確定追加規則，點擊取消覆蓋規則",
-                    importOver:"規則導入完畢!",
-                    postOver:"發送成功，返回消息：",
-                    copyOver:"複製成功！",
-                    postError:"發送失敗，錯誤内容：",
-                    importCustomSame:"存在同名規則，是否覆蓋？",
-                    copyLinks:"嗅探下載資源",
-                    noLinks:"當前頁面沒有資源！",
-                    userName:"請輸入用戶賬號",
-                    userPass:"請輸入用戶密碼",
-                    seekKey:"嗅探快捷鍵："
-                };
-                manageLinksLang={
-                    copyAll:"全部複製",
-                    copySel:"複製選中",
-                    addTips:"%i代表遞增 %n代表文件名",
-                    sortByName:"按文件名排序",
-                    sortByUrl:"按網址排序",
-                    sortByType:"按擴展名排序",
-                    preHolder:"批量前綴",
-                    nextHolder:"批量後綴",
-                    closeBtn:"關閉",
-                    typeHead:"類型："
-                };
-                break;
-            default:
-                config={
-                    configure:"Easy-Offline Configure",
-                    yyw:"115",
-                    baidu:"BaiduPan",
-                    furk:"Furk",
-                    seedr:"Seedr",
-                    pcloud:"Pcloud",
-                    xunlei:"Xunlei",
-                    xunleipan:"XunleiPan",
-                    xiaomi:"MiWifi",
-                    weiyun:"Weiyun",
-                    bitqiu:"bitqiu",
-                    apiv:"Apiv Online play",
-                    torrent:"Torrent download in itorrent.org",
-                    btcache:"Torrent download in btcache.me",
-                    enable:"Enable ",
-                    disable:"Disable ",
-                    addIcon:"Add new site",
-                    settingTitle: "Easy Offline",
-                    urlRegexpTips: "Customize the Link Regexp, one per line",
-                    disableOnSite: "Disabled currently, click to enable",
-                    bdPathTips: "No need to add'/all files'",
-                    bdPathTitle: "Path of BDpan:",
-                    settingMouseOver: "Display the icon only when the mouse passes over",
-                    settingBtn: "Save",
-                    allDisableError: "Cannot disable all!",
-                    siteRuleSetOK: "Set successfully, refresh takes effect",
-                    setOK: "Set successfully",
-                    regExpError: "Contains invalid regularity, please re-enter",
-                    addSiteRuleTitle: "Customize new icon rules, one per line",
-                    siteRulePlaceholder: "site @@ sitename @@ link regexp @@ icon base64 @@ icon background color @@ hide icon\n\nUse @@ to separated, use $url for the target Link, $hash for the hash of the target magnet link, ${reg} for regexp result on link, $text for link text, $title for link title\n\nUse // to comment rule\n\nFor example: http://192.168.2.1/d2r?u=$url@@MyRouter\nhttp://xxx.com/magnet/$hash@@MyMagnetLinkDownload@@^magnet@@data:image/png;base64,AAA@@ffffff",
-                    inputLink: "Enter the link that needs to be downloaded with this:",
-                    importOrNot:"Do you want to import rules?",
-                    importCustomAlert:"Ok to add rule，Cancel to cover rule",
-                    importOver:"Rules import over!",
-                    postOver:"Post over, return: ",
-                    copyOver:"Copy over!",
-                    postError:"Fail in post, error: ",
-                    importCustomSame:"Rule exists, overwritten?",
-                    copyLinks:"Seek downloadable links",
-                    noLinks:"No links！",
-                    userName:"Input user name",
-                    userPass:"Input user pass",
-                    seekKey:"Seek key: "
-                };
-                manageLinksLang={
-                    copyAll: "Copy all",
-                    copySel: "Copy selected",
-                    addTips: "%i means increment, %n means file name",
-                    sortByName: "Sort by name",
-                    sortByUrl: "Sort by URL",
-                    sortByType: "Sort by type",
-                    preHolder: "Batch Prefix",
-                    nextHolder: "Batch Suffix",
-                    closeBtn: "Close",
-                    typeHead: "Type:"
-                };
-                break;
-        }
         return config[name]?config[name]:name;
     };
 
@@ -830,24 +755,29 @@
         defaultReg=new RegExp(defaultReg, 'i');
         addCustomSites(()=>{
             storage.getItem("siteSort",v=>{
-                siteSort=v;
-                if(!siteSort)siteSort=["baidu","yyw","furk","seedr"];
-                siteSort.forEach(function(item) {
-                    var siteConfig=sites[item];
-                    if(siteConfig){
-                        siteConfig.name=item;
+                setTimeout(() => {
+                    if (_unsafeWindow.eoAddons) {
+                        sites = Object.assign(sites, _unsafeWindow.eoAddons);
+                    }
+                    siteSort=v;
+                    if(!siteSort)siteSort=["baidu","yyw","furk","seedr"];
+                    siteSort.forEach(function(item) {
+                        var siteConfig=sites[item];
+                        if(siteConfig){
+                            siteConfig.name=item;
+                            sitesArr.push(siteConfig);
+                        }
+                    });
+                    for(let siteName in sites){
+                        let hasSite=false;
+                        siteSort.forEach(function(item){if(item==siteName)hasSite=true;});
+                        if(hasSite)continue;
+                        var siteConfig=sites[siteName];
+                        siteConfig.name=siteName;
                         sitesArr.push(siteConfig);
                     }
-                });
-                for(let siteName in sites){
-                    let hasSite=false;
-                    siteSort.forEach(function(item){if(item==siteName)hasSite=true;});
-                    if(hasSite)continue;
-                    var siteConfig=sites[siteName];
-                    siteConfig.name=siteName;
-                    sitesArr.push(siteConfig);
-                }
-                pageRun();
+                    pageRun();
+                }, 1);
             });
         });
     });
@@ -1490,7 +1420,7 @@
             document.body.appendChild(configContent);
             configContent.innerHTML=`
                 <div style="text-align: center;width:300px;min-height:300px;position:fixed;left:50%;top:50%;margin-top:-250px;margin-left:-150px;z-index:100000;background-color:#ffffff;border:1px solid #afb3b6;border-radius:10px;opacity:0.95;filter:alpha(opacity=95);box-shadow:5px 5px 20px 0px #000;color:#6e7070;">
-                    <a href="https://greasyfork.org/scripts/22590#additional-info" style="position: absolute; width: 100%; left: 0; text-decoration: underline;">${i18n("settingTitle")}</a>
+                    <a href="https://greasyfork.org/scripts/22590#additional-info" style="font-size: large;position: absolute; width: 100%; left: 0; text-decoration: underline;"><h3 style="padding: 0; margin: 0;">${i18n("settingTitle")}</h3></a>
                     <a id="easyOfflineDisable" href="#" style="color: red;top: 18px; position: absolute; width: 100%; left: 0; text-decoration: underline;display:none;">${i18n("disableOnSite")}</a>
                     <div style="text-align:center;font-size: 12px;margin-top: 38px;">${i18n("urlRegexpTips")}</div>
                     <textarea id="configInput" placeholder="http:.*\\.php\\?getRes=\\d+\n\\.doc$\n\\.xls$\n\\.ppt$" style="position:absolute;left:18px;top:60px;width:260px;height:110px;background-color:white;color:black;"></textarea>
@@ -1669,7 +1599,8 @@
         if(!link){
             if(targetA) link=targetA.href;
             else link=prompt(i18n("inputLink"),"magnet:?xt=urn:btih:");
-        }else{
+        }
+        if(link){
             init();
             showDiskIcons(link.trim(),mouseEve.pageY-10,mouseEve.pageX-10);
         }
